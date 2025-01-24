@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM Game</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
+    <script src="rexvirtualjoystick.min.js"></script>
+  </head>
+  <body>
+    <div id="game-container"></div>
+
+    <!-- Dialogue Overlay -->
+    <div id="dialogue-overlay" style="display: none">
+      <div id="npc-dialogue-panel" class="dialogue-panel">
+        <img id="npc-image" src="" alt="NPC" class="dialogue-image" />
+        <p id="npc-dialogue"></p>
+      </div>
+      <div id="player-dialogue-panel" class="dialogue-panel">
+        <img
+          id="player-image"
+          src="sprites/player1.png"
+          alt="Player"
+          class="dialogue-image"
+        />
+        <p id="player-dialogue">...</p>
+      </div>
+      <input
+        id="player-input"
+        type="text"
+        placeholder="Type your message..."
+        style="display: none"
+      />
+      <div class="button-container">
+        <button id="say-button" class="button">Say</button>
+        <button id="leave-button" class="button">Leave</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

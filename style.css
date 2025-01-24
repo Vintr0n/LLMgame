@@ -1,0 +1,111 @@
+#dialogue-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 10;
+  padding-bottom: 100px; /* Space for buttons below input box */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 600px;
+  margin-top: 10px;
+}
+
+.button-container .button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  font-size: 18px;
+  color: #ffffff;
+  background-color: #444444;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button-container .button:hover {
+  background-color: #666666;
+}
+
+.dialogue-panel {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8); /* 80% transparent white */
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  text-align: left; /* Align text to the left */
+}
+
+.dialogue-image {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff;
+  margin-right: 15px; /* Space between image and text */
+}
+
+.dialogue-text {
+  flex: 1; /* Allow text to take up remaining space */
+}
+
+#player-input {
+  width: 80%;
+  max-width: 600px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 600px;
+  margin-top: 10px;
+}
+
+.button-container .button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  font-size: 18px;
+  color: #ffffff;
+  background-color: #444444;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button-container .button:hover {
+  background-color: #666666;
+}
+
+#game-container .talk-button {
+  position: relative;
+}
+
+.npc-image {
+  position: absolute;
+  left: 500px; /* Adjust as needed to position next to the button */
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%; /* Circular appearance */
+  border: 2px solid #fff;
+  background-color: rgba(255, 255, 255, 0.8);
+}
