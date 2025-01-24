@@ -14,7 +14,6 @@ class GameScene extends Phaser.Scene {
     this.load.image("player", "sprites/player1sprite.png");
     this.load.image("npc", "sprites/girl1sprite.png");
     this.load.image("npc2", "sprites/guy1sprite.png");
-    this.load.image("suspect", "sprites/suspect.png");
     this.load.image("guy1", "sprites/guy1.png");
     this.load.image("girl1", "sprites/girl1.png");
   }
