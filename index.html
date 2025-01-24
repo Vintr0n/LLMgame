@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=game.html">
-  <title>LLM game</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Game - Menu</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <style>
+    /* Additional styles for the menu */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #333333;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #menu-container {
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    #menu-title {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    #grandad-image {
+      width: 62px;
+      height: auto;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    #menu-description {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+
+    .menu-button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      color: white;
+      background-color: #444444;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .menu-button:hover {
+      background-color: #666666;
+    }
+  </style>
 </head>
 <body>
-  Loading... <a href="game.html">LLM Game</a>.
+  <div id="menu-container">
+    <h1 id="menu-title">LLM Game</h1>
+    <img id="grandad-image" src="sprites/grandad.png" alt="Grandad">
+    <p id="menu-description">
+      Grandad's cake has been eaten! All that remains are crumbs. Help Grandad find who ate the cake by asking his two grandchildren.
+    </p>
+    <button class="menu-button" onclick="startGame()">Play</button>
+  </div>
+
+  <script>
+    function startGame() {
+      window.location.href = "game.html";
+    }
+  </script>
 </body>
 </html>
