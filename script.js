@@ -394,12 +394,18 @@ async function fetchSecrets() {
   return secrets;
 }
 
+let sessionId = localStorage.getItem("sessionId");
+if (!sessionId) {
+  sessionId = crypto.randomUUID(); // Generate a unique session ID
+  localStorage.setItem("sessionId", sessionId);
+}
+
 async function sendChatMessage(playerInput, npcType) {
   try {
     const response = await fetch("https://api-call.stuartvinton.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input: playerInput, npc: npcType }),
+      body: JSON.stringify({ input: playerInput, npc: npcType, sessionId: sessionId }),
     });
 
     if (!response.ok) {
