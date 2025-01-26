@@ -108,7 +108,8 @@ if (!collisionLayer) {
       })
       .setInteractive()
       .setVisible(false)
-      .on("pointerdown", () => this.onTalkButtonPressed());
+      .on("pointerdown", () => this.onTalkButtonPressed())
+      .setDepth(1000);
     const sayButton = document.getElementById("say-button");
     const leaveButton = document.getElementById("leave-button");
 
@@ -336,7 +337,8 @@ this.physics.add.collider(this.npc, this.npc2);
       this.npcImage = this.add
         .image(buttonX - 70, buttonY, npcImageKey) // Position the image relative to the button
         .setScale(1)
-        .setOrigin(1);
+        .setOrigin(1)
+        .setDepth(1000);
     } else {
       // Update the NPC image texture and position
       this.npcImage.setTexture(npcImageKey);
@@ -402,6 +404,9 @@ this.physics.add.collider(this.npc, this.npc2);
     this.joyStick.base.setVisible(true);
     this.joyStick.thumb.setVisible(true);
     this.talkButton.setVisible(true);
+
+    this.cameras.main.scrollY = 0; // Adjusts the vertical scroll to the top
+    this.cameras.main.scrollX = 0; // (Optional) Adjust horizontal scroll to the left if needed
   }
 
   startConversation(npcImageSrc, npcDialogueText) {
