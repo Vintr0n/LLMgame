@@ -48,7 +48,7 @@ collisionLayer.setCollisionByExclusion([-1]);
 
 
 
-console.log("Collision Layer: ", collisionLayer);
+//console.log("Collision Layer: ", collisionLayer);
 if (!collisionLayer) {
     console.error("Collision layer is undefined. Check your map JSON or Phaser initialization.");
     return;
