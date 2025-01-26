@@ -1,3 +1,4 @@
+
 "use strict";
 
 class GameScene extends Phaser.Scene {
@@ -6,6 +7,14 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
+
+
+  
+    this.load.tilemapTiledJSON("map", "tileset/outsidemap.json");
+    this.load.image("outside1", "tileset/outside1.png");
+    this.load.image("outside2", "tileset/outside2.png");
+    this.load.image("outside3", "tileset/outside3.png");
+    
     var url =
       "https://cdn.jsdelivr.net/gh/rexrainbow/phaser3-rex-notes/dist/rexvirtualjoystickplugin.min.js";
     this.load.plugin("rexvirtualjoystickplugin", url, true);
@@ -18,6 +27,35 @@ class GameScene extends Phaser.Scene {
     this.load.image("girl1", "sprites/girl1.png");
   }
   create() {
+  
+
+  // Create the map
+  const map = this.make.tilemap({ key: "map" });
+
+const tileset1 = map.addTilesetImage("outside1", "outside1");
+const tileset2 = map.addTilesetImage("outside2", "outside2");
+const tileset3 = map.addTilesetImage("outside3", "outside3");
+
+const groundLayer = map.createLayer("ground", [tileset1, tileset2], 0, 0);
+const passibleLayer = map.createLayer("passible", [tileset3], 0, 0);
+const collisionLayer = map.createLayer("collision", [tileset3], 0, 0);
+
+groundLayer.setDepth(0);
+passibleLayer.setDepth(2); // Passible layer appears above the player
+collisionLayer.setDepth(1);
+
+collisionLayer.setCollisionByExclusion([-1]);
+
+
+
+console.log("Collision Layer: ", collisionLayer);
+if (!collisionLayer) {
+    console.error("Collision layer is undefined. Check your map JSON or Phaser initialization.");
+    return;
+}
+
+
+
     const worldWidth = this.scale.gameSize.width;
     const worldHeight = this.scale.gameSize.height;
 
@@ -29,6 +67,11 @@ class GameScene extends Phaser.Scene {
       base: this.add.circle(0, 0, 50, 0x888888, 0.8),
       thumb: this.add.circle(0, 0, 20, 0xcccccc, 0.8),
     });
+
+  // Adjust the camera to follow the player
+  this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
 
     // Add "Talk" button
     this.talkButton = this.add
@@ -82,12 +125,15 @@ class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
     // Add player and NPCs
-    //this.player = this.physics.add.sprite(400, 300, "player").setScale(1.5);
+    this.player = this.physics.add.sprite(400, 300, "player").setScale(1.5);
     this.player = this.physics.add
       .sprite(worldWidth / 2, worldHeight / 2, "player")
       .setScale(1.5);
+      this.physics.add.collider(this.player, collisionLayer);
 
-    const getRandomPosition = (dimension, padding = 100) =>
+      this.physics.add.collider(this.player, collisionLayer);
+
+    const getRandomPosition = (dimension, padding = 50) =>
       Phaser.Math.Between(padding, dimension - padding);
 
     this.npc = this.physics.add
@@ -380,6 +426,9 @@ const config = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
 };
+
+
+
 
 let secrets = null; // Cache the secrets after fetching
 
