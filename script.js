@@ -413,8 +413,10 @@ this.physics.add.collider(this.npc, this.npc2);
     this.joyStick.thumb.setVisible(true);
     this.talkButton.setVisible(true);
 
-    this.cameras.main.scrollY = 0; // Adjusts the vertical scroll to the top
-    this.cameras.main.scrollX = 0; // (Optional) Adjust horizontal scroll to the left if needed
+    this.cameras.main.scrollY = 0; 
+    this.cameras.main.scrollX = 0; 
+      this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
   }
 
   startConversation(npcImageSrc, npcDialogueText) {
