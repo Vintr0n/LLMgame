@@ -158,6 +158,9 @@ if (!collisionLayer) {
 
     this.player.setCollideWorldBounds(true);
 
+    this.physics.add.collider(this.npc, collisionLayer);
+this.physics.add.collider(this.npc2, collisionLayer);
+
     // Use handleCollision method for player-NPC collisions
     this.physics.add.collider(
       this.player,
