@@ -11,6 +11,14 @@
   <body>
     <div id="game-container"></div>
 
+    <div id="question-counter" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-family: Arial, sans-serif; font-size: 18px; color: white; background: rgba(0, 0, 0, 0.7); padding: 5px 15px; border-radius: 10px; z-index: 1000;">
+      Questions Asked: 0
+    </div>
+
+    <div id="home-icon" style="position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; cursor: pointer; z-index: 1000;">
+      <img src="sprites/homeicon.png" alt="Home" style="width: 100%; height: 100%; object-fit: contain;" />
+    </div>
+
     <!-- Dialogue Overlay -->
     <div id="dialogue-overlay" style="display: none">
       <div id="npc-dialogue-panel" class="dialogue-panel">

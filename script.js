@@ -1,5 +1,28 @@
-
 "use strict";
+// Initialize question counter display on game load
+document.addEventListener("DOMContentLoaded", () => {
+  const questionCounterElement = document.getElementById('question-counter');
+  const questionCounter = sessionStorage.getItem('questionCounter') || 0;
+  questionCounterElement.innerText = `Questions Asked: ${questionCounter}`;
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize question counter display
+  const questionCounterElement = document.getElementById('question-counter');
+  const questionCounter = sessionStorage.getItem('questionCounter') || 0;
+  questionCounterElement.innerText = `Questions Asked: ${questionCounter}`;
+
+  // Add functionality to the home icon
+  const homeIcon = document.getElementById('home-icon');
+  homeIcon.addEventListener('click', () => {
+    location.reload(true);
+    // Reset the question counter
+    sessionStorage.setItem('questionCounter', '0');
+    // Redirect to index.html
+    window.location.href = 'index.html';
+  });
+});
+
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -56,6 +79,8 @@ if (!collisionLayer) {
 
 
 
+
+
     const worldWidth = this.scale.gameSize.width;
     const worldHeight = this.scale.gameSize.height;
 
@@ -64,8 +89,8 @@ if (!collisionLayer) {
       x: 100,
       y: worldHeight - 150,
       radius: 50,
-      base: this.add.circle(0, 0, 50, 0x888888, 0.8),
-      thumb: this.add.circle(0, 0, 20, 0xcccccc, 0.8),
+      base: this.add.circle(0, 0, 50, 0x888888, 0.8).setDepth(100), // Set depth for base
+      thumb: this.add.circle(0, 0, 20, 0xcccccc, 0.8).setDepth(100), // Set depth for thumb
     });
 
   // Adjust the camera to follow the player
@@ -125,7 +150,8 @@ if (!collisionLayer) {
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
 
     // Add player and NPCs
-    this.player = this.physics.add.sprite(400, 300, "player").setScale(1.5);
+  
+
     this.player = this.physics.add
       .sprite(worldWidth / 2, worldHeight / 2, "player")
       .setScale(1.5);
@@ -133,9 +159,12 @@ if (!collisionLayer) {
 
       this.physics.add.collider(this.player, collisionLayer);
 
+      
+
     const getRandomPosition = (dimension, padding = 50) =>
       Phaser.Math.Between(padding, dimension - padding);
 
+    /*
     this.npc = this.physics.add
       .sprite(
         getRandomPosition(worldWidth),
@@ -152,6 +181,24 @@ if (!collisionLayer) {
       )
       .setScale(1.5);
 
+      */
+
+      this.npc = this.physics.add
+      .sprite(
+        64,
+        162,
+        "npc",
+      )
+      .setScale(1.5);
+
+    this.npc2 = this.physics.add
+      .sprite(
+        256,
+        640,
+        "npc2",
+      )
+      .setScale(1.5);
+
     // Make NPCs immovable and enable collision
     this.npc.setCollideWorldBounds(true).setImmovable(true);
     this.npc2.setCollideWorldBounds(true).setImmovable(true);
@@ -160,6 +207,9 @@ if (!collisionLayer) {
 
     this.physics.add.collider(this.npc, collisionLayer);
 this.physics.add.collider(this.npc2, collisionLayer);
+
+    // Prevent NPCs from passing through each other
+this.physics.add.collider(this.npc, this.npc2);
 
     // Use handleCollision method for player-NPC collisions
     this.physics.add.collider(
@@ -177,8 +227,6 @@ this.physics.add.collider(this.npc2, collisionLayer);
       this,
     );
 
-    // Prevent NPCs from passing through each other
-    this.physics.add.collider(this.npc, this.npc2);
 
     // DOM elements for dialogue overlay
     this.dialogueOverlay = document.getElementById("dialogue-overlay");
@@ -370,8 +418,8 @@ this.physics.add.collider(this.npc2, collisionLayer);
     this.talkButton.setVisible(false);
 
     // Show Say and Leave buttons
-    this.sayButton.setVisible(true);
-    this.leaveButton.setVisible(true);
+    this.sayButton.setVisible(false);
+    this.leaveButton.setVisible(false);
 
     // Display dialogue
     this.dialogueOverlay.style.display = "flex";
@@ -452,7 +500,17 @@ if (!sessionId) {
   localStorage.setItem("sessionId", sessionId);
 }
 
+
 async function sendChatMessage(playerInput, npcType) {
+  
+  const questionCounterElement = document.getElementById('question-counter');
+  const questionCounter = sessionStorage.getItem('questionCounter') || 0;
+
+  if (parseInt(questionCounter) >= 20) {
+    showDecisionScreen();
+    return;
+  }
+
   try {
     const response = await fetch("https://api-call.stuartvinton.workers.dev/", {
       method: "POST",
@@ -469,12 +527,84 @@ async function sendChatMessage(playerInput, npcType) {
 
     // Update NPC dialogue
     document.getElementById("npc-dialogue").innerText = npcContent;
+
+    // Increment and store the counter
+    const updatedCounter = parseInt(questionCounter) + 1;
+    sessionStorage.setItem('questionCounter', updatedCounter);
+    console.log(updatedCounter);
+    questionCounterElement.innerText = `Questions Asked: ${updatedCounter}`;
+
+    if (updatedCounter >= 20) {
+      playerInput.style.display = 'none';
+      showDecisionScreen();
+      
+    }
+
   } catch (error) {
     console.error("Error sending chat message:", error);
     document.getElementById("npc-dialogue").innerText =
       "There was an error communicating with the NPC.";
   }
 }
+function showDecisionScreen() {
+  const decisionOverlay = document.createElement('div');
+  decisionOverlay.id = 'decision-overlay';
+  decisionOverlay.style.position = 'absolute';
+  decisionOverlay.style.top = 0;
+  decisionOverlay.style.left = 0;
+  decisionOverlay.style.width = '100%';
+  decisionOverlay.style.height = '100%';
+  decisionOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+  decisionOverlay.style.display = 'flex';
+  decisionOverlay.style.justifyContent = 'center';
+  decisionOverlay.style.alignItems = 'center';
+  decisionOverlay.style.zIndex = 9999;
+
+  decisionOverlay.innerHTML = `
+    <div style="text-align: center; color: white; font-family: Arial, sans-serif;">
+    <h1 style="margin-bottom: 16px;">Your 20 questions are up!</h1>
+      <h1 style="margin-bottom: 20px;">Which NPC ate Grandad's cake?</h1>
+      <div style="display: flex; justify-content: center; gap: 50px; align-items: center;">
+        <img src="sprites/girl1.png" id="npc-charlotte" style="cursor: pointer; width: 150px; height: auto; border-radius: 10px;" />
+        <img src="sprites/guy1.png" id="npc-gary" style="cursor: pointer; width: 150px; height: auto; border-radius: 10px;" />
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(decisionOverlay);
+
+  document.getElementById('npc-charlotte').addEventListener('click', () => makeGuess('charlotte'));
+  document.getElementById('npc-gary').addEventListener('click', () => makeGuess('gary'));
+}
+
+
+async function makeGuess(npc) {
+  try {
+    const response = await fetch('/guess', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ npc, sessionId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to send guess.");
+    }
+
+    const data = await response.json();
+    alert(data.message); // Show feedback from the server
+    window.location.reload(); // Reset the game
+  } catch (error) {
+    console.error('Error making guess:', error);
+  }
+}
+
+/*
+window.onload = function() {
+  sessionStorage.setItem('questionCounter', '0');
+  const questionCounterElement = document.getElementById('question-counter');
+  questionCounterElement.innerText = 'Questions Asked: 0';
+};
+*/
 
 
 const game = new Phaser.Game(config);
