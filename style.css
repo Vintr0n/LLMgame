@@ -109,3 +109,7 @@
   border: 2px solid #fff;
   background-color: rgba(255, 255, 255, 0.8);
 }
+
+#exclamation-icon {
+  display: none; /* Hide the icon by default */
+}

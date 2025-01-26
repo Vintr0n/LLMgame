@@ -23,6 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  // Add event listener to exclamation-icon
+  const exclamationIcon = document.getElementById("exclamation-icon");
+  exclamationIcon.addEventListener("click", () => {
+    showDecisionScreen();
+  });
+});
+
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -516,6 +524,8 @@ async function sendChatMessage(playerInput, npcType) {
     return;
   }
 
+  
+
   try {
     const response = await fetch("https://api-call.stuartvinton.workers.dev/", {
       method: "POST",
@@ -539,6 +549,13 @@ async function sendChatMessage(playerInput, npcType) {
     console.log(updatedCounter);
     questionCounterElement.innerText = `Questions Asked: ${updatedCounter}`;
 
+    if(parseInt(questionCounter) >= 2){
+      document.querySelector('#exclamation-icon').style.display = 'block';
+    }
+    else{
+      document.querySelector('#exclamation-icon').style.display = 'none';
+    }
+
     if (updatedCounter >= 20) {
       playerInput.style.display = 'none';
       showDecisionScreen();
@@ -561,31 +578,84 @@ function showDecisionScreen() {
   decisionOverlay.style.height = '100%';
   decisionOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
   decisionOverlay.style.display = 'flex';
+  decisionOverlay.style.flexDirection = 'column';
   decisionOverlay.style.justifyContent = 'center';
   decisionOverlay.style.alignItems = 'center';
   decisionOverlay.style.zIndex = 9999;
 
+  // Add NPC choices
   decisionOverlay.innerHTML = `
-    <div style="text-align: center; color: white; font-family: Arial, sans-serif;">
-    <h1 style="margin-bottom: 16px;">Your 20 questions are up!</h1>
-      <h1 style="margin-bottom: 20px;">Which NPC ate Grandad's cake?</h1>
-      <div style="display: flex; justify-content: center; gap: 50px; align-items: center;">
-        <img src="sprites/girl1.png" id="npc-charlotte" style="cursor: pointer; width: 150px; height: auto; border-radius: 10px;" />
-        <img src="sprites/guy1.png" id="npc-gary" style="cursor: pointer; width: 150px; height: auto; border-radius: 10px;" />
-      </div>
+    <h1 style="color: white; font-family: Arial, sans-serif; margin-bottom: 20px;">Who ate Grandad's cake?</h1>
+    <div style="display: flex; justify-content: center; gap: 50px;">
+      <img src="sprites/girl1.png" id="npc-charlotte" style="cursor: pointer; width: 150px; height: auto; border-radius: 10px;" />
+      <img src="sprites/guy1.png" id="npc-gary" style="cursor: pointer; width: 150px; height: auto; border-radius: 10px;" />
     </div>
+    <p id="result-message" style="color: white; font-family: Arial, sans-serif; margin-top: 20px; text-align: center;"></p>
   `;
 
   document.body.appendChild(decisionOverlay);
 
-  document.getElementById('npc-charlotte').addEventListener('click', () => makeGuess('charlotte'));
-  document.getElementById('npc-gary').addEventListener('click', () => makeGuess('gary'));
+  // Disable further clicks after guessing
+  let hasGuessed = false;
+
+  // Handle guesses
+  const handleGuess = async (npc) => {
+    if (hasGuessed) return; // Prevent multiple guesses
+    hasGuessed = true;
+
+    // Disable both NPC icons
+    document.getElementById('npc-charlotte').style.pointerEvents = 'none';
+    document.getElementById('npc-gary').style.pointerEvents = 'none';
+
+    // Show a loading message
+    const resultMessage = document.getElementById('result-message');
+    resultMessage.textContent = 'Checking your answer...';
+
+    try {
+      // Make the API call
+      const response = await fetch('https://api-call.stuartvinton.workers.dev/guess', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ npc, sessionId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit your guess.');
+      }
+
+      const data = await response.json();
+
+      // Show the result from the API
+      resultMessage.textContent = data.message;
+    } catch (error) {
+      console.error('Error making guess:', error);
+      resultMessage.textContent = 'An error occurred. Please try again later.';
+    }
+  };
+
+  // Add event listeners to NPC icons
+  document.getElementById('npc-charlotte').addEventListener('click', () => handleGuess('charlotte'));
+  document.getElementById('npc-gary').addEventListener('click', () => handleGuess('gary'));
+
+  const restartButton = document.createElement('button');
+restartButton.textContent = 'Restart';
+restartButton.style.marginTop = '20px';
+restartButton.style.padding = '10px 20px';
+restartButton.style.fontSize = '16px';
+restartButton.style.cursor = 'pointer';
+restartButton.addEventListener('click', () => {
+  window.location.reload(); // Reset the game
+  sessionStorage.setItem('questionCounter', '0');
+  window.location.href = 'index.html';
+});
+decisionOverlay.appendChild(restartButton);
+
 }
 
 
 async function makeGuess(npc) {
   try {
-    const response = await fetch('/guess', {
+    const response = await fetch('https://api-call.stuartvinton.workers.dev/guess', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ npc, sessionId }),
