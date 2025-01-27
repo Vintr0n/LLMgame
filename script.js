@@ -399,6 +399,8 @@ this.physics.add.collider(this.npc, this.npc2);
   }
 
  endConversation() {
+  //console.log("endConversation called");
+
     this.inConvo = false;
 
     // Hide dialogue elements
@@ -413,17 +415,19 @@ this.physics.add.collider(this.npc, this.npc2);
     this.joyStick.thumb.setVisible(true);
     this.talkButton.setVisible(true);
 
-    // Reset camera position
     this.resetCameraToTop();
+
 }
 
+// Helper method to reset the camera position
 resetCameraToTop() {
-    // Reset Phaser camera scroll
-    this.cameras.main.scrollX = 0;
-    this.cameras.main.scrollY = 0;
+ // console.log("camera reset");
+  // Reset Phaser camera scroll
+  this.cameras.main.scrollX = 0;
+  this.cameras.main.scrollY = 0;
 
-    // Reset browser viewport scroll to the top
-    window.scrollTo(0, 0);
+  // Reset browser viewport scroll to the top
+  window.scrollTo(0, 0);
 }
 
 
@@ -453,28 +457,7 @@ resetCameraToTop() {
     this.playerInput.focus();
   }
 
-  endConversation() {
-    this.inConvo = false;
 
-    // Resume NPC movement
-    this.npcMoveTimer.paused = false;
-
-    // Hide dialogue elements
-    this.dialogueOverlay.style.display = "none";
-    this.npcDialogue.innerText = "";
-    this.playerDialogue.innerText = "";
-    this.playerInput.value = "";
-    this.playerInput.style.display = "none";
-
-    // Show joystick and Talk button
-    this.joyStick.base.setVisible(true);
-    this.joyStick.thumb.setVisible(true);
-    this.talkButton.setVisible(true);
-
-    // Hide Say and Leave buttons
-    this.sayButton.setVisible(false);
-    this.leaveButton.setVisible(false);
-  }
 
   async onSayButtonPressed() {
     const playerInput = this.playerInput.value.trim();
