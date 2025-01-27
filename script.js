@@ -417,15 +417,13 @@ this.physics.add.collider(this.npc, this.npc2);
     this.resetCameraToTop();
 }
 
-// Helper method to reset the camera position
 resetCameraToTop() {
-    this.tweens.add({
-        targets: this.cameras.main,
-        scrollY: 0, // Target vertical scroll
-        scrollX: 0, // Target horizontal scroll (optional)
-        duration: 500, // Duration in milliseconds
-        ease: 'Cubic.easeOut' // Easing function for a smooth transition
-    });
+    // Reset Phaser camera scroll
+    this.cameras.main.scrollX = 0;
+    this.cameras.main.scrollY = 0;
+
+    // Reset browser viewport scroll to the top
+    window.scrollTo(0, 0);
 }
 
 
