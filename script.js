@@ -415,6 +415,8 @@ this.physics.add.collider(this.npc, this.npc2);
     this.joyStick.thumb.setVisible(true);
     this.talkButton.setVisible(true);
 
+    this.npcMoveTimer.paused = false;
+
     this.resetCameraToTop();
 
 }
