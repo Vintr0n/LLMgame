@@ -398,7 +398,7 @@ this.physics.add.collider(this.npc, this.npc2);
     await sendChatMessage(playerInput, this.currentNPCType);
   }
 
-  endConversation() {
+ endConversation() {
     this.inConvo = false;
 
     // Hide dialogue elements
@@ -413,11 +413,16 @@ this.physics.add.collider(this.npc, this.npc2);
     this.joyStick.thumb.setVisible(true);
     this.talkButton.setVisible(true);
 
-    this.cameras.main.scrollY = 0; 
-    this.cameras.main.scrollX = 0; 
-      this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-  this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-  }
+    // Reset camera position
+    this.resetCameraToTop();
+}
+
+// Helper method to reset the camera position
+resetCameraToTop() {
+    this.cameras.main.scrollY = 0; // Reset vertical scroll
+    this.cameras.main.scrollX = 0; // Reset horizontal scroll (optional)
+}
+
 
   startConversation(npcImageSrc, npcDialogueText) {
     this.inConvo = true;
