@@ -419,9 +419,15 @@ this.physics.add.collider(this.npc, this.npc2);
 
 // Helper method to reset the camera position
 resetCameraToTop() {
-    this.cameras.main.scrollY = 0; // Reset vertical scroll
-    this.cameras.main.scrollX = 0; // Reset horizontal scroll (optional)
+    this.tweens.add({
+        targets: this.cameras.main,
+        scrollY: 0, // Target vertical scroll
+        scrollX: 0, // Target horizontal scroll (optional)
+        duration: 500, // Duration in milliseconds
+        ease: 'Cubic.easeOut' // Easing function for a smooth transition
+    });
 }
+
 
 
   startConversation(npcImageSrc, npcDialogueText) {
